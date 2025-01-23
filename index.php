@@ -18,7 +18,7 @@
     <?php include 'partials/_signUpModal.php'; ?>
     
 
-
+    <!-- Carasoul starts here -->
     <div class="container-fluid p-0">
         <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -46,12 +46,10 @@
     </div>
 
     <!-- categories section starts -->
-
     <div class="container" style="width: 80%">
         <h1 class="text-center my-3">iNetwork - Browse Catagories</h1>
 
         <!-- alter the cards with the help of while loop -->
-
         <div class="row">
             <?php
             $sql = "SELECT * from categories";
@@ -78,6 +76,8 @@
             ?>
         </div>
     </div>
+
+    <!-- Footer section starts here. -->
     <?php include("partials/_footer.php"); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

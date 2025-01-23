@@ -43,8 +43,7 @@ echo '
                 <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signUpModal" type="submit">Sign up</button>
             </div>
         </div>
-    </nav>
-    
+    </nav> 
     ';
 
 ?>

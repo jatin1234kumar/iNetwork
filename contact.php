@@ -15,7 +15,7 @@
     <?php include("partials/_navbar.php"); ?>
 
 
-
+    <!-- This is the footer of the website. -->
     <?php include("partials/_footer.php"); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

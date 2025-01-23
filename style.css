@@ -3,3 +3,7 @@
     height: 60vh !important; /* Set height as 50% of viewport height */ 
 
 }
+
+.footer_padding {
+    margin-top: 5rem !important;
+}
