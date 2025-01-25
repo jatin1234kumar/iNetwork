@@ -67,7 +67,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title">' . $categoryName . '</h5>
                                         <p class="card-text">' . substr($categoryDiscription, 0, 80) . '...</p>
-                                        <a href="threadlist.php?catId='. $catId .'" class="btn btn-primary">View threads</a>
+                                        <a href="threadlist.php?catId='. $catId .'" class="btn btn-primary">Read more</a>
                                     </div>
                                 </div>
                             </div>';

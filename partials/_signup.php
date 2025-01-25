@@ -20,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] = "POST"){
     } else{
         if($userPass === $userCPass){
             $passHash = password_hash($userPass, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO `users` (`S.no.`, `User_email`, `User_password`, `Date`) VALUES (Null, '$userEmail', '$$passHash', current_timestamp());";
+            $sql = "INSERT INTO `users` (`S.no.`, `User_email`, `User_password`, `Date`) VALUES (Null, '$userEmail', '$passHash', current_timestamp());";
             $result = mysqli_query($conn, $sql);
             if($result){
                 $showAlert = "Successfully signed up! You can now login.";

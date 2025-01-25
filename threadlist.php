@@ -115,9 +115,11 @@ while ($row = mysqli_fetch_array($result)) {
                             <img src="assets/profile.png" width="54px" alt="profile picture">
                         </div>
                         <div class="flex-grow-1 ms-3 d-flex flex-column align-content-center justify-content-around w-100">
+                        <div class="d-flex justify-content-between">
+                            <h3><a class="text-black text-decoration-none" href="thread.php?threadCatId=' . $id . '&userId=' . $userId . '&threadId=' . $threadId . '">' . $threadTitle . '</a></h3>
                             <h1 class="m-0 " style="line-height: 1.2; font-size: 1.3rem; font-weight: 700;">Anonamus User at ' . $threadDate . '</h1>
-                            <h3><a class="text-black text-decoration-none" href="thread.php?threadCatId=' . $id . '&userId=' . $userId . '&threadId=' . $threadId . '">' . $threadTitle . '</a></h5>
-                            <p class="m-0" style="line-height: 1.2;">' . $threadDesc . '</p>
+                        </div>    
+                            <p class="m-0" style="line-height: 1.2; width:60%;">' . $threadDesc . '</p>
                         </div>
                     </div>
             ';
