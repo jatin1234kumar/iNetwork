@@ -106,18 +106,20 @@ while ($row = mysqli_fetch_array($result)) {
                 $threadDesc = $threadIds["thread_description"];
                 $userId = $threadIds["thread_user_id"];
                 $threadId = $threadIds["thread_id"];
+                $threadDate = $threadIds["date"];
                 $content = true;
 
                 echo '
-            <div class="d-flex align-items-center mb-4">
-                <div class="flex-shrink-0">
-                    <img src="assets/profile.png" width="54px" alt="profile picture">
-                </div>
-                <div class="flex-grow-1 ms-3 d-flex flex-column align-content-center justify-content-around w-100">
-                    <h5><a class="text-black text-decoration-none" href="thread.php?threadCatId=' . $id . '&userId=' . $userId . '&threadId=' . $threadId . '">' . $threadTitle . '</a></h5>
-                    <p class="m-0" style="line-height: 1.2;">' . $threadDesc . '</p>
-                </div>
-            </div>
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="flex-shrink-0">
+                            <img src="assets/profile.png" width="54px" alt="profile picture">
+                        </div>
+                        <div class="flex-grow-1 ms-3 d-flex flex-column align-content-center justify-content-around w-100">
+                            <h1 class="m-0 " style="line-height: 1.2; font-size: 1.3rem; font-weight: 700;">Anonamus User at ' . $threadDate . '</h1>
+                            <h3><a class="text-black text-decoration-none" href="thread.php?threadCatId=' . $id . '&userId=' . $userId . '&threadId=' . $threadId . '">' . $threadTitle . '</a></h5>
+                            <p class="m-0" style="line-height: 1.2;">' . $threadDesc . '</p>
+                        </div>
+                    </div>
             ';
             }
 
