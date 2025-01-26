@@ -13,11 +13,7 @@
 <body>
     <!-- This is the Navbar for the iNetwork website -->
     <?php include 'partials/_navbar.php'; ?>
-    <?php include 'partials/_dbconnect.php'; ?>
-    <?php include 'partials/_signInModal.php'; ?>
-    <?php include 'partials/_signUpModal.php'; ?>
     
-
     <!-- Carasoul starts here -->
     <div class="container-fluid p-0">
         <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">

@@ -33,28 +33,32 @@ while ($row = mysqli_fetch_array($result)) {
     <!-- This is the Navbar for the iNetwork website -->
     <?php include 'partials/_navbar.php'; ?>
 
-    <!-- get request from the threadlist page -->
+    <!-- get request from the threadlist page of line no. ============================== 81 -->
     <?php
     $showalert = false;
-   
+
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $problemTitle = $_POST["problemTitle"];
         $problemDesc = $_POST["problemDesc"];
+        $threadUserid = $_POST["user_id"];
 
-        $sql = "INSERT INTO `threads` (`thread_id`, `thread_title`, `thread_description`, `thread_category_id`, `thread_user_id`, `date`) VALUES (NULL, '$problemTitle', '$problemDesc', '$id', '0', current_timestamp());";
+        $sql = "INSERT INTO `threads` (`thread_id`, `thread_title`, `thread_description`, `thread_category_id`, `thread_user_id`, `date`) VALUES (NULL, '$problemTitle', '$problemDesc', '$id', '$threadUserid', current_timestamp());";
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
-            $showalert = true;
-        }
-
-        if ($showalert) {
             echo '
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Success!</strong> Your Question is posted successfully.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        ';
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> Your Question is posted successfully.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            ';
+        } else {
+            echo '
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> There is some problem in posting you question. Please try again after some time.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            ';
         }
     }
     ?>
@@ -72,24 +76,53 @@ while ($row = mysqli_fetch_array($result)) {
                         copyright-infringing material.<br> Do not post “offensive” posts, links or images.
                         <br> Remain respectful of other members at all times.
                     </p>
-                    <!-- <button class="btn btn-primary btn-lg" type="button">Learn more</button> -->
                 </div>
             </div>
         </div>
 
+
+        <!-- Threads post request is handeled on line no. ============================================ 40  -->
         <div class="container pb-4">
-            <h1 class="my-4">Ask a Question:</h1>
-            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post" class="">
-                <div class="mb-3">
-                    <input type="text" name="problemTitle" class="form-control" placeholder="Title"
-                        id="exampleFormControlInput1">
-                </div>
-                <div class="mb-3">
-                    <textarea class="form-control" name="problemDesc" placeholder="Description"
-                        id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <?php
+            if (isset($_SESSION["logdein"])) {
+                echo '
+                    <h1 class="my-4">Ask a Question:</h1>
+                    <form action="' . $_SERVER['REQUEST_URI'] . '" method="post" class="">
+                        <div class="mb-3">
+                            <input type="text" name="problemTitle" class="form-control" placeholder="Title"
+                                id="exampleFormControlInput1">
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" name="problemDesc" placeholder="Description"
+                                id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                        <div class="hidden">
+                            <input type="text" class="form-control d-none" name="user_id" value="' . $_SESSION["user_id"] . '" id="hiddenInput">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                ';
+            } else {
+                echo '
+                    <h1 class="my-4">Please login to ask a Question:</h1>
+                    <form action="" method="post" class="" disabled>
+                        <div class="mb-3">
+                            <input type="text" name="problemTitle" class="form-control" disabled placeholder="Title"
+                                id="exampleFormControlInput1">
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" disabled name="problemDesc" placeholder="Description"
+                                id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                        <div class="hidden">
+                            <input type="text" class="form-control d-none" disabled value="" id="hiddenInput">
+                        </div>
+                        <button type="submit" class="btn btn-primary" disabled >Submit</button>
+                    </form>
+                ';
+            }
+
+            ?>
         </div>
 
 
@@ -101,12 +134,19 @@ while ($row = mysqli_fetch_array($result)) {
             $resultThreads = mysqli_query($conn, $sql);
             $content = false;
 
-            while ($threadIds = mysqli_fetch_array($resultThreads)) {
+            while ($threadIds = mysqli_fetch_assoc($resultThreads)) {
                 $threadTitle = $threadIds["thread_title"];
                 $threadDesc = $threadIds["thread_description"];
                 $userId = $threadIds["thread_user_id"];
                 $threadId = $threadIds["thread_id"];
                 $threadDate = $threadIds["date"];
+
+                // collecting user email from user table
+                $sql2 = "SELECT * from users where user_id='$userId'";
+                $result2 = mysqli_query($conn, $sql2);
+                $rowUser = mysqli_fetch_assoc($result2);
+                $userName = $rowUser["User_email"];
+
                 $content = true;
 
                 echo '
@@ -117,7 +157,7 @@ while ($row = mysqli_fetch_array($result)) {
                         <div class="flex-grow-1 ms-3 d-flex flex-column align-content-center justify-content-around w-100">
                         <div class="d-flex justify-content-between">
                             <h3><a class="text-black text-decoration-none" href="thread.php?threadCatId=' . $id . '&userId=' . $userId . '&threadId=' . $threadId . '">' . $threadTitle . '</a></h3>
-                            <h1 class="m-0 " style="line-height: 1.2; font-size: 1.3rem; font-weight: 700;">Anonamus User at ' . $threadDate . '</h1>
+                            <h1 class="m-0 " style="line-height: 1.2; font-size: 1.1rem; font-weight: 700;">Asked by: ' . $userName . ' at ' . $threadDate . '</h1>
                         </div>    
                             <p class="m-0" style="line-height: 1.2; width:60%;">' . $threadDesc . '</p>
                         </div>

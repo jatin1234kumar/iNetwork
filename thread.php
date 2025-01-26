@@ -10,6 +10,11 @@ $threadId = $_GET["threadId"];
 $sql = "SELECT * from threads where thread_category_id='$threadCatId' and thread_id='$threadId'";
 $result = mysqli_query($conn, $sql);
 
+$sql2 = "SELECT * from users where user_id=$userId";
+$result2 = mysqli_query($conn, $sql2);
+$row = mysqli_fetch_assoc($result2);
+$userNamefromDatabase = $row["User_email"];
+
 while ($row = mysqli_fetch_array($result)) {
     $threadTitle = $row["thread_title"];
     $threadDescription = $row["thread_description"];
@@ -38,26 +43,29 @@ while ($row = mysqli_fetch_array($result)) {
 
     <!-- commets form php of line no. ================================================ 79 -->
     <?php
-    $showalert = false;
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $commentDesc = $_POST["commentDesc"];
+        $commentUserId = $_POST["commentUserId"]; 
 
-        $sql = "INSERT INTO `comments` (`comment_id`, `comment_desc`, `thread_id`, `thread_cat_id`, `user_id`, `comment_time`) VALUES (NULL, '$commentDesc', '$threadId', '$threadCatId', '$userId', current_timestamp());";
+        $sql = "INSERT INTO `comments` (`comment_id`, `comment_desc`, `thread_id`, `thread_cat_id`, `user_id`, `comment_time`) VALUES (NULL, '$commentDesc', '$threadId', '$threadCatId', '$commentUserId', current_timestamp());";
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
-            $showalert = true;
-        }
-
-        if ($showalert) {
             echo '
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Success!</strong> Your comment got posted.
+                <strong>Successfully!</strong> Posted a comment.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        ';
+            </div>';
+        } else {
+            echo '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> There is some problem in posting you comment.Please try again after some time.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
         }
+
+        
     }
     ?>
 
@@ -69,7 +77,7 @@ while ($row = mysqli_fetch_array($result)) {
                     <h1 class="display-5 fw-bold"><?php echo $threadTitle; ?></h1>
                     <p class=" fs-5 my-3"><?php echo $threadDescription; ?></p>
                     <hr class="my-4">
-                    <p class="fs-5 fw-bold">Posted by: Harry
+                    <p class="fs-5 fw-bold">Posted by: <?php echo $userNamefromDatabase; ?>
                     </p>
                 </div>
             </div>
@@ -77,14 +85,36 @@ while ($row = mysqli_fetch_array($result)) {
 
         <!-- comment form starts here and its php is on line no. ================================================== 40 -->
         <div class="container">
-            <h1 class="my-4">Post a comment:</h1>
-            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post" class="">
-                <div class="mb-3">
-                    <textarea placeholder="Type your comment" class="form-control" name="commentDesc"
-                        id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <?php 
+                if (isset($_SESSION["logdein"])) {
+                    echo '
+                        <h1 class="my-4">Post a comment:</h1>
+                        <form action="'. $_SERVER['REQUEST_URI'] .'" method="post" class="">
+                            <div class="mb-3">
+                                <textarea placeholder="Type your comment" class="form-control" name="commentDesc"
+                                    id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <div class="hidden">
+                                <input type="text" class="form-control d-none" name="commentUserId" value="' . $_SESSION["user_id"] . '" id="hiddenInput">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    ';
+                }else {
+                    echo '
+                        <h1 class="my-4">Please login to post a comment:</h1>
+                        <form action="" method="post" class="" disabled>
+                            <div class="mb-3">
+                                <textarea disabled placeholder="Type your comment" class="form-control" name="commentDesc"
+                                    id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <button type="submit" disabled class="btn btn-primary">Submit</button>
+                        </form>
+                    ';
+                }
+            
+            ?>
+           
         </div>
 
         <!-- discussion section starts here -->
@@ -101,6 +131,13 @@ while ($row = mysqli_fetch_array($result)) {
                 $commentDesc = $rows["comment_desc"];
                 $content = true;
                 $commentTime = $rows["comment_time"];
+                $commentUserId = $rows["user_id"];
+
+                // collecting user email from user table
+                $sql3 = "SELECT * from users where user_id='$commentUserId'";
+                $result3 = mysqli_query($conn, $sql3);
+                $rowUser = mysqli_fetch_assoc($result3);
+                $userName = $rowUser["User_email"];
 
                 echo '
                     <div class="d-flex align-items-center mb-4">
@@ -108,7 +145,7 @@ while ($row = mysqli_fetch_array($result)) {
                             <img src="assets/profile.png" width="54px" alt="profile picture">
                         </div>
                         <div class="flex-grow-1 ms-3 d-flex flex-column align-content-center justify-content-around w-100">
-                            <h5>Anonymous User at ' . $commentTime . '</h5>
+                            <h5>'. $userName .' at ' . $commentTime . '</h5>
                             <p class="m-0" style="line-height: 1.2;">' . $commentDesc . '</p>
                         </div>
                     </div>

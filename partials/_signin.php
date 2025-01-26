@@ -16,13 +16,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             session_start();
             $_SESSION["username"] = $userEmail;
             $_SESSION["logdein"] = true;
+            $_SESSION["user_id"] = $row["user_id"];
             header("location: /projects/forum/index.php?logedin=true");
             exit();
         }else {
-            echo "passwords do not match";
+            $showError = "Incorrect Password";
+            header("location: /projects/forum/index.php?logedin=false&error=$showError");
         }
     }else {
-        echo "Username doesn't exists";
+        $showError = "Invalid Useremail";
+        header("location: /projects/forum/index.php?logedin=false&error=$showError");
     }
 }
 

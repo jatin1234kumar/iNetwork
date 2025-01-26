@@ -14,10 +14,16 @@
     <!-- This is the Navbar for the iNetwork website -->
     <?php include("partials/_navbar.php"); ?>
 
+    <!-- container started -->
+    <div class="container mt-2" style="width: 60%; height:62vh;">
+
+    </div>
+
 
     <!-- This is the footer of the website. -->
     <?php include("partials/_footer.php"); ?>
 
+    <!-- script of bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
